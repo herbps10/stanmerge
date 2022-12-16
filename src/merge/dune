@@ -1,0 +1,7 @@
+(library
+  (name merge)
+  (public_name stanmerge.merge)
+  (libraries stanc.frontend)
+  (preprocess
+    (pps ppx_jane ppx_deriving.fold ppx_deriving.map))
+)

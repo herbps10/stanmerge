@@ -1,0 +1,3 @@
+[submodule "stanc3"]
+	path = lib/stanc3
+	url = https://github.com/stan-dev/stanc3
