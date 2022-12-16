@@ -2,9 +2,23 @@
 
 Tool for block-by-block merging of Stan files.
 
+
+
+## Installation
+The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`]. As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
+
+Next, rune `dune build` from the top level of the `stanmerge` project.
+
 ## Usage
+The `stanmerge` executable expects to be given a list of Stan files as arguments:
 ```
 stanmerge [model_file1.stan] [model_file2.stan] ...
+```
+The merged file will be output to `stdout`.
+
+If using `dune,` run:
+```
+dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 
 ## Notes
