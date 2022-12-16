@@ -2,7 +2,15 @@
 
 Tool for block-by-block merging of Stan files.
 
-# Example
+## Usage
+```
+stanmerge [model_file1.stan] [model_file2.stan] ...
+```
+
+## Notes
+- Comments are currently not well handled and may appear out-of-order in the merge results.
+
+## Basic Example
 
 This example can be found in [`examples/location_scale`](examples/location_scale). 
 
