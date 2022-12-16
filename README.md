@@ -24,7 +24,7 @@ dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 ## Notes
 - Comments are currently not well handled and may appear out-of-order in the output.
 
-## Basic Example
+## Getting Started Example
 
 This example can be found in [`examples/location_scale`](examples/location_scale). 
 
@@ -120,3 +120,7 @@ model {
   y ~ student_t(nu, mu, sigma);
 }
 ```
+
+## More Examples
+
+- [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling towards an overall mean. Includes R code to fit the models output by `stanmerge`.
