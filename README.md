@@ -8,7 +8,7 @@ stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 
 ## Notes
-- Comments are currently not well handled and may appear out-of-order in the merge results.
+- Comments are currently not well handled and may appear out-of-order in the output.
 
 ## Basic Example
 
