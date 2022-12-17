@@ -1,6 +1,6 @@
 # stanmerge: syntax-aware merging of Stan programs
 
-Utility for merging multiple Stan files into one in a way that respects Stan programs. 
+Prototype utility for merging multiple Stan files into one in a way that respects Stan programs. 
 
 The intended use case is to facilitate building multiple versions of related models. One way to approach this is to build one universal model that includes flags as data inputs to enable or disable model components (this is the approach taken by the optimized models found in `rstanarm`). The alternative workflow proposed with `stanmerge` is to refactor model components into separate files, which can then be combined into multiple versions of a complete model using `stanmerge`.
  
