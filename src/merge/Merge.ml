@@ -9,11 +9,12 @@ let combine_block b1opt b2opt =
     | (None, Some b2) -> Some b2
     | (Some b1, Some b2) -> 
       let { stmts= stmts1; xloc= xloc1 } = b1 in
-      let { stmts= stmts2; _ } = b2 in
-      let b = { stmts= stmts1@stmts2; xloc= xloc1 } in
+      let { stmts= stmts2; xloc= xloc2 } = b2 in
+      let b = { stmts= stmts1@stmts2; xloc= (combine_location_span xloc1 xloc2) } in
       Some b
 
-let combine_comment c1 _ = c1
+(* For now, comments are stripped out *)
+let combine_comment _ _ = []
 
 let merge_programs (p1 : Ast.untyped_program) (p2 : Ast.untyped_program) = 
   let { functionblock= bf1
@@ -48,9 +49,3 @@ let merge_asts x =
     [] -> ""
     | [ast1; ast2] -> Pretty_printing.pretty_print_program (List.fold_left [ast2] ~init:ast1 ~f:merge_programs)
     | ast::asts -> Pretty_printing.pretty_print_program (List.fold_left asts ~init:ast ~f:merge_programs)
-
-(*let merge_asts asts = let strs = List.map asts ~f:(Pretty_printing.pretty_print_program)  in
-  String.concat strs
-  *)
-  
-
