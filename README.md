@@ -123,5 +123,7 @@ model {
 - [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling towards an overall mean. Includes R code to fit the models output by `stanmerge`.
 
 
-## Notes
-- Comments are currently not well handled and may appear out-of-order in the output.
+## Todo
+- Comments are currently not included in the merged output because they are not
+  stored in the AST (they are stored in a separate list), and more work is
+  needed to figure out how to merge multiple comment lists.
