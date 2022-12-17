@@ -27,7 +27,7 @@ dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 
 This example can be found in [`examples/location_scale`](examples/location_scale). 
 
-Suppose we have a set of observations $y_i$ for $i = 1, \dots, N$. We have two competing models we would like to fit to estimate the location and scale of the observations. The first is a Normal model:
+Suppose we have a set of observations $\{ y_i \}$ for $i = 1, \dots, N$. We have two competing models we would like to fit to estimate the location and scale of the observations. The first is a Normal model:
 
 $$
 \begin{align}
