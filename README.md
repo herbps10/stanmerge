@@ -122,7 +122,7 @@ model {
 
 ## More Examples
 
-- [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling towards an overall mean. Includes R code to fit the models output by `stanmerge`.
+- [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling. Includes R code to fit the models output by `stanmerge`.
 
 
 ## Todo
