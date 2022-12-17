@@ -1,4 +1,4 @@
-# stanmerge: syntax-aware merging of Stan files
+# stanmerge: syntax-aware merging of Stan programs
 
 Utility for merging multiple Stan files into one in a way that respects Stan programs. 
 
@@ -48,7 +48,7 @@ y_i &\sim \text{Student-$t$}(\nu, \mu, \sigma), \\
 $$
 
 To translate these into Stan using `stanmerge`, first we write the parts of the Stan model that are common to both the Normal and Student-T models in `model.stan`:
-```
+```stan
 data {
   int N;
   vector[N] y;
@@ -64,14 +64,14 @@ model {
 ```
 
 Then we write the Stan code that are specific to each of the two models into separate files. For the Normal model, we have `data_model_normal.stan`:
-```
+```stan
 model {
   y ~ normal(mu, sigma);
 }
 
 ```
 And for the Student-T model, `data_model_robust.stan`:
-```
+```stan
 data {
   real<lower=0> nu;
 }
@@ -81,7 +81,7 @@ model {
 ```
 
 Next, we use `stanmerge` to merge the files into two complete Stan models. For the Normal model, we run:
-```
+```stan
 $ stanmerge examples/location_scale/model.stan examples/location_scale/data_model_normal.stan
 data {                 
   int N;
@@ -100,7 +100,7 @@ model {
 ```
 
 And for the robust Student-T model:
-```
+```stan
 $ stanmerge examples/location_scale/model.stan examples/location_scale/data_model_robust.stan
 data {                 
   int N;
@@ -129,3 +129,4 @@ model {
 - Comments are currently not included in the merged output because they are not
   stored in the AST (they are stored in a separate list), and more work is
   needed to figure out how to merge multiple comment lists.
+- Add option to output to file instead of `stdout`
