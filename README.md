@@ -5,7 +5,7 @@ Tool for block-by-block merging of Stan files.
 
 
 ## Installation
-The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`]. As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
+The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`](lib/). As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
 
 Next, rune `dune build` from the top level of the `stanmerge` project.
 
@@ -21,10 +21,7 @@ If using `dune,` run:
 dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 
-## Notes
-- Comments are currently not well handled and may appear out-of-order in the output.
-
-## Basic Example
+## Getting Started Example
 
 This example can be found in [`examples/location_scale`](examples/location_scale). 
 
@@ -120,3 +117,11 @@ model {
   y ~ student_t(nu, mu, sigma);
 }
 ```
+
+## More Examples
+
+- [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling towards an overall mean. Includes R code to fit the models output by `stanmerge`.
+
+
+## Notes
+- Comments are currently not well handled and may appear out-of-order in the output.
