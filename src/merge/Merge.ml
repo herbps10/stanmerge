@@ -2,6 +2,8 @@ open Core_kernel
 open Frontend
 open Ast
 
+let combine_location_span xloc1 _ = xloc1
+
 let combine_block b1opt b2opt = 
   match (b1opt, b2opt) with 
     | (None, None) -> None
