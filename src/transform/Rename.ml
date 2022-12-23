@@ -52,8 +52,8 @@ let rename_variable_var x y { identifier; initial_value } =
 let rec rename_variable_stmt x y ({ stmt; smeta } : untyped_statement) : untyped_statement = 
   let stmt = match stmt with
   | VarDecl { decl_type; transformation; variables; is_global } ->
-      VarDecl { decl_type
-      ; transformation
+      VarDecl { decl_type = Middle.SizedType.map (rename_variable_expr x y) decl_type
+      ; transformation = Middle.Transformation.map (rename_variable_expr x y) transformation
       ; variables = List.map ~f:(rename_variable_var x y) variables
       ; is_global }
   | For {loop_variable; lower_bound; upper_bound; loop_body} ->
