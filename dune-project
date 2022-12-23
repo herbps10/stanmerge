@@ -17,8 +17,8 @@
 
 (package
  (name stanmerge)
- (synopsis "A short synopsis")
- (description "A longer description")
+ (synopsis "Merge Stan files")
+ (description "Tool for block-by-block merging of Stan source files.")
  (depends ocaml dune)
  (tags
   (topics "to describe" your project)))

@@ -1,4 +1,4 @@
 (executable
  (public_name stanmerge)
  (name main)
- (libraries stanmerge.merge stanc.frontend stanmerge))
+ (libraries stanmerge.transform stanc.frontend stanmerge))

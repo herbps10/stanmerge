@@ -35,8 +35,8 @@ let merge_programs (p1 : Ast.untyped_program) (p2 : Ast.untyped_program) =
       ; modelblock= bm2
       ; generatedquantitiesblock= bgq2
       ; comments = c2 } = p2 in
-  let bf = (combine_block bf1 bf2) in
-  let pnew = { functionblock= bf
+  let pnew = { 
+      functionblock= (combine_block bf1 bf2)
     ; datablock= (combine_block bd1 bd2)
     ; transformeddatablock= (combine_block btd1 btd2)
     ; parametersblock= (combine_block bp1 bp2)
