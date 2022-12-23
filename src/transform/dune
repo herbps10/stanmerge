@@ -1,5 +1,4 @@
 (library
-  (name transform)
-  (public_name stanmerge.transform)
-  (libraries stanc.frontend)
-)
+ (name transform)
+ (public_name stanmerge.transform)
+ (libraries stanc.frontend))
