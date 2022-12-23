@@ -47,7 +47,15 @@ let parse_rules (name, values) =
 let main () =
   Arg.parse options add_file usage;
   if String.compare !use_config "" <> 0 then
-    let json = Yojson.Basic.from_file !use_config in
+    let json =
+      try Yojson.Basic.from_file !use_config with
+      | Sys_error e ->
+          Printf.eprintf "%s\n" e;
+          exit 1
+      | Yojson.Json_error e ->
+          Printf.eprintf "JSON error: %s\n" e;
+          exit 1
+    in
     let config = List.map ~f:parse_rules (Yojson.Basic.Util.to_assoc json) in
     let asts = List.map ~f:get_ast_from_config config in
     print_endline (Merge.merge_asts asts)
