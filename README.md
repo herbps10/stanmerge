@@ -4,7 +4,7 @@ Prototype utility for transforming and merging multiple Stan files into one in a
 
 The intended use case is to facilitate building multiple versions of related models, and to make it easier to reuse complex model components.
  
-`stanmerge` relies on the `stanc3` compiler to generate an AST for each input file. The ASTs of each of the top-level blocks (`data`, `parameters`, `model`, ...) are then transformed and concatenated to form a new merged program.
+`stanmerge` relies on the [`stanc3`](https://mc-stan.org/stanc3) compiler to generate an AST for each input file. The ASTs of each of the top-level blocks (`data`, `parameters`, `model`, ...) are then transformed and concatenated to form a new merged program.
 
 ## Installation
 The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`](lib/). As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
