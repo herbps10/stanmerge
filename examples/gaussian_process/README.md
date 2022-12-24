@@ -28,7 +28,7 @@ The benefit of using `stanmerge` in this example comes from the fact that the Ga
 We can write the Gaussian Process prior once, in its own file, and then merge it twice into the final model using variable rewriting to
 target the right parameters each time.
 
-To start, `model.stan` includes the core model structure:
+To start, [`model.stan`](model.stan) includes the core model structure:
 ```stan
 data {
   int<lower=1> N;
@@ -52,7 +52,7 @@ generated quantities {
 
 Note that the parameters `mu` and `log_sigma` are the ones we want to apply Gaussian Process priors to.
 
-Next, `gp.stan` contains a generic Gaussian Process prior structure, using `var` as a generic name for the parameter of interest:
+Next, [`gp.stan`](gp.stan) contains a generic Gaussian Process prior structure, using `var` as a generic name for the parameter of interest:
 ```stan
 transformed data {
   vector[N] var_zeros = rep_vector(0, N);
@@ -80,7 +80,7 @@ model {
 ```
 
 The idea is that we will include `gp.stan` twice, the first time replacing `var` with `mu` and the second time replacing `var` with `log_sigma`. 
-This is expressed in `config.json`:
+This is expressed in [`config.json`](config.json):
 ```
 {
   "examples/gaussian_process/gp.stan": {
@@ -93,7 +93,7 @@ This is expressed in `config.json`:
 }
 ```
 
-Next we run `stanmerge` to build an output file `full_model.stan`:
+Next we run `stanmerge` to build an output file `full_model.stan` (or you can run the included `generate_model.sh` script):
 ```sh
 dune build && dune exec stanmerge -- 
   --config examples/gaussian_process/config.json 
