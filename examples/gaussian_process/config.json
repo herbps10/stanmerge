@@ -1,0 +1,9 @@
+{
+  "examples/gaussian_process/gp.stan": {
+    "var": "mu"
+  },
+  "examples/gaussian_process/gp.stan": {
+    "var": "log_sigma"
+  },
+  "examples/gaussian_process/model.stan": {}
+}
