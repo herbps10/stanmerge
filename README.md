@@ -1,10 +1,10 @@
 # stanmerge: syntax-aware merging of Stan programs
 
-Prototype utility for merging multiple Stan files into one in a way that respects Stan programs. 
+Prototype utility for transforming and merging multiple Stan files into one in a way that respects Stan programs. 
 
-The intended use case is to facilitate building multiple versions of related models. One way to approach this is to build one universal model that includes flags as data inputs to enable or disable model components (this is the approach taken by the optimized models found in `rstanarm`). The alternative workflow proposed with `stanmerge` is to refactor model components into separate files, which can then be combined into multiple versions of a complete model using `stanmerge`.
+The intended use case is to facilitate building multiple versions of related models, and to make it easier to reuse complex model components.
  
-`stanmerge` relies on the `stanc3` compiler to generate an AST for each input file. The ASTs of each of the top-level blocks (`data`, `parameters`, `model`, ...) are then concatenated to form a new merged program.
+`stanmerge` relies on the [`stanc3`](https://mc-stan.org/stanc3) compiler to generate an AST for each input file. The ASTs of each of the top-level blocks (`data`, `parameters`, `model`, ...) are then transformed and concatenated to form a new merged program.
 
 ## Installation
 The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`](lib/). As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
@@ -18,10 +18,35 @@ stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 The merged file will be output to `stdout`.
 
-If using `dune,` run:
+If using `dune`, run:
 ```
 dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
+
+Alternatively, you can supply a JSON configuration file:
+```
+stanmerge --config config.json
+```
+or, if using `dune`, 
+```
+dune exec stanmerge -- --config config.json
+```
+
+## Configuration file format
+A JSON configuration file can be used to specify the input files and the variable name transformation rules to apply to each one. It's format should follow the following example, in which Stan model filenames are supplied as the key to an associative array that specifies any variable name replacement rules:
+```json
+{
+  "model_file1.stan": {
+    "var": "alpha"
+  },
+  "model_file2.stan": {
+    "var": "beta",
+  }
+}
+```
+This would first include `model_file1.stan`, rewriting any instance of `var` in a variable name to `alpha`, and then include `model_file2.stan`, rewriting any instance of `var` in a variable name to `beta`. Note that the variable search terms may be regular expressions: for example, we could specify "^var$" in order to replace instances of variables whose entire name is "var". 
+
+See [examples/gaussian_process](/examples/gaussian_process/) for an example that uses variable name rewriting.
 
 ## Getting Started Example
 
@@ -122,8 +147,8 @@ model {
 
 ## More Examples
 
-- [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling. Includes R code to fit the models output by `stanmerge`.
-
+- [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling. Includes R code.
+- [examples/gaussian_process](/examples/gaussian_process/): using Gaussian Processes to estimate the mean and scale of a dataset. Provides an example of variable name rewriting. Includes R code.
 
 ## Todo
 - Comments are currently not included in the merged output because they are not
