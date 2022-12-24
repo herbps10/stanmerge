@@ -61,10 +61,6 @@ let main () =
     print_endline (Merge.merge_asts asts)
   else
     let asts = List.map !model_files ~f:get_ast in
-    let asts_renamed =
-      List.map asts
-        ~f:(Transform.Rename.rename_variable (Str.regexp "var") "alpha")
-    in
-    print_endline (Merge.merge_asts asts_renamed)
+    print_endline (Merge.merge_asts asts)
 
 let () = main ()
