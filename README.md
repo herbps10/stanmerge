@@ -1,6 +1,6 @@
-# stanmerge: syntax-aware merging of Stan programs
+# stanmerge: syntax-aware merging of Stan models
 
-Prototype utility for transforming and merging multiple Stan files into one in a way that respects Stan programs. 
+Prototype utility for transforming and merging multiple Stan files into one in a way that respects the syntax of Stan models. 
 
 The intended use case is to facilitate building multiple versions of related models, and to make it easier to reuse complex model components.
  
