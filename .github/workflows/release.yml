@@ -23,7 +23,7 @@ jobs:
       
       - uses: ocaml/setup-ocaml@v3
         with:
-          ocaml-compiler: 5.1
+          ocaml-compiler: 4.14.1
 
       - run: |
           opam install . --deps-only --working-dir lib/stanc3
