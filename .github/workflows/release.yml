@@ -25,7 +25,9 @@ jobs:
         with:
           ocaml-compiler: 5.1
 
-      - run: opam install . --deps-only
+      - run: |
+        opam pin add stanc.dev lib/stanc3 --no-action
+        opam install . --deps-only --with-teste
       - run: opam exec -- dune build
 
       - name: Upload binary
