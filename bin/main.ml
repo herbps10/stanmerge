@@ -1,4 +1,4 @@
-open Core_kernel
+open Core
 open Frontend
 open Transform
 
@@ -18,7 +18,7 @@ let model_files = ref []
 let add_file filename = model_files := !model_files @ [ filename ]
 
 let get_ast filename =
-  let res, warnings = Parse.parse_file Parser.Incremental.program filename in
+  let res, warnings = Parse.parse_program (`File filename) in
   Warnings.pp_warnings Fmt.stderr warnings;
   match res with
   | Result.Ok ast -> ast
@@ -29,7 +29,7 @@ let get_ast filename =
 let get_ast_from_config (model_file, rules) =
   let ast = get_ast model_file in
   List.fold rules ~init:ast ~f:(fun acc (x, y) ->
-      Transform.Rename.rename_variable (Str.regexp x) y acc)
+      Transform.Rename.rename_variable x y acc)
 
 type rule = string * string
 type rules = rule list

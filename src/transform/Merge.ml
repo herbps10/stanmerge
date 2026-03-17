@@ -1,4 +1,4 @@
-open Core_kernel
+open Core
 open Frontend
 open Ast
 
@@ -63,8 +63,8 @@ let merge_asts x =
   match x with
   | [] -> ""
   | [ ast1; ast2 ] ->
-      Pretty_printing.pretty_print_program
+      Pretty_print_prog.pretty_print_program
         (List.fold_left [ ast2 ] ~init:ast1 ~f:merge_programs)
   | ast :: asts ->
-      Pretty_printing.pretty_print_program
+      Pretty_print_prog.pretty_print_program
         (List.fold_left asts ~init:ast ~f:merge_programs)
