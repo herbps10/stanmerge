@@ -31,16 +31,29 @@ jobs:
 
       - run: opam exec -- dune build bin/main.exe
 
+      - name: Copy and rename binary
+        run: cp _build/default/bin/main.exe ${{ matrix.artifact }}
+
       - name: Upload binary
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: _build/default/bin/main.exe
+          path: {{ matrix.artifact }}
 
   release:
     needs: build
     runs-on: ubuntu-latest
     steps: 
-      - uses: softprops/action-gh-release@v2
+      - name: Download all artifacts
+        uses: actions/download-artifacts@v4
+        with:
+          path: artifacts
+          merge-multiple: true
+
+      - name: List artifacts
+        run: ls -la artifacts/
+
+      - name: Create release
+        uses: softprops/action-gh-release@v2
         with: 
-          files: "*.exe"
+          files: artifacts/*
