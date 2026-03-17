@@ -11,9 +11,9 @@ jobs:
       matrix:
         include:
           - os: ubuntu-latest
-            artifact: stanmerge-linux-x86_64
+            asset: stanmerge-linux-x86_64
           - os: macos-latest
-            artifact: stanmerge-macos-arm64
+            asset: stanmerge-macos-arm64
 
     runs-on: ${{ matrix.os }}
 

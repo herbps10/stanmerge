@@ -23,7 +23,6 @@ Download the latest binary for your platform from the [Releases](../../releases/
 |----------|----------|
 | Linux (x86_64) | [stanmerge-linux-x86_64](../../releases/latest/download/stanmerge-linux-x86_64) |
 | macOS (Apple Silicon ) | [stanmerge-macos-arm64](../../releases/latest/download/stanmerge-macos-arm64) |
-| macOS (Intel) | [stanmerge-linux-x86_64](../../releases/latest/download/stanmerge-macos-x86_64) |
 
 On Linux/macOS, make the binary executable after downloading:
 ```bash
