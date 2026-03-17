@@ -1,43 +1,82 @@
 # stanmerge: syntax-aware merging of Stan models
 
-Tool for transforming and merging multiple [Stan](https://mc-stan.org/) models into one in a way that respects Stan model syntax.
+[![Release](https://img.shields.io/github/v/release/herbps10/stanmerge)](https://github.com/herbps10/stanmerge/releases/latest)
 
-The intended use cases are to
+Tool for transforming and merging multiple [Stan](https://mc-stan.org/) models in a way that respects Stan model syntax.
+
+The intended use cases are to:
 - facilitate building multiple versions of related models, and 
 - make it easier to reuse complex model components.
  
 `stanmerge` relies on the [`stanc3`](https://mc-stan.org/stanc3) compiler to generate an AST for each input file. The ASTs of each of the top-level blocks (`data`, `parameters`, `model`, ...) are then transformed and concatenated to form a new merged program.
 
-This is experimental software, and breaking changes should be expected.
+> [!WARNING]
+> This is experimental software, and breaking changes should be expected.
 
 ## Installation
+
+### Option 1: Pre-built Binaries
+
+Download the latest binary for your platform from the [Releases](../../releases/latest) page:
+
+| Platform | Download |
+|----------|----------|
+| Linux (x86_64) | [stanmerge-linux-x86_64](../../releases/latest/download/stanmerge-linux-x86_64) |
+| macOS (Apple Silicon ) | [stanmerge-macos-arm64](../../releases/latest/download/stanmerge-macos-arm64) |
+| macOS (Intel) | [stanmerge-linux-x86_64](../../releases/latest/download/stanmerge-macos-x86_64) |
+
+On Linux/macOS, make the binary executable after downloading:
+```bash
+chmod +x stanmerge-*
+```
+
+## Option 2: Build from Source
+
 The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`](lib/). As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
 
-Next, rune `dune build` from the top level of the `stanmerge` project.
+Then, clone this repository and build:
+
+```bash
+git clone --recursive https://github.com/herbps10/stanmerge.git
+cd stanmerge
+opam install . --deps-only
+dune build
+```
+
+The compiled binary will be at `_build/default/bin/main.exe`.
+
+## Quick Start
+
+Merge two Stan files:
+```bash
+stanmerge model.stan data_model.stan
+```
+The merged program is printed to `stdout`. Redirect to a file with:
+```bash
+stanmerge model.stan data_model.stan > merged.stan
+```
 
 ## Usage
-The `stanmerge` executable expects to be given a list of Stan files as arguments:
+### Basic Merging
+Pass any number of Stan files as arguments:
 ```
 stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 The merged file will be output to `stdout`.
 
-If using `dune`, run:
+If building from source, you can also use `dune`:
 ```
 dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 
-Alternatively, you can supply a JSON configuration file:
-```
+### Configuration File
+A JSON configuration file can be used to specify input files along with variable name transformation rules.
+```bash
 stanmerge --config config.json
 ```
-or, if using `dune`, 
-```
-dune exec stanmerge -- --config config.json
-```
 
-## Configuration file format
-A JSON configuration file can be used to specify the input files and the variable name transformation rules to apply to each one. It's format should follow the following example, in which Stan model filenames are supplied as the key to an associative array that specifies any variable name replacement rules:
+#### Format
+The configuration file maps Stan model filenames to an associative array of variable rename rules:
 ```json
 {
   "model_file1.stan": {
@@ -48,15 +87,19 @@ A JSON configuration file can be used to specify the input files and the variabl
   }
 }
 ```
-This would first include `model_file1.stan`, rewriting any instance of `var` in a variable name to `alpha`, and then include `model_file2.stan`, rewriting any instance of `var` in a variable name to `beta`. Note that the variable search terms may be regular expressions: for example, we could specify "^var$" in order to replace instances of variables whose entire name is "var". 
+In this example:
+1. `model_file1.stan` is included, with all instances of `var` in variable names rewritten to `alpha`
+2. `model_file2.stan` is included, with all instances of `var` in variable names rewritten to `beta`
 
 See [examples/gaussian_process](/examples/gaussian_process/) for an example that uses variable name rewriting.
 
-## Getting Started Example
+## Example: Location-Scale Models
 
-This example can be found in [`examples/location_scale`](examples/location_scale). 
+*Full example in [`examples/location_scale`](examples/location_scale).* 
 
-Suppose we have a set of observations $\{ y_i \}$ for $i = 1, \dots, N$. We have two competing models we would like to fit to estimate the location and scale of the observations. The first is a Normal model:
+Suppose we have a set of observations $\{ y_i \}$ for $i = 1, \dots, N$ and two competing models for estimating their location and scale.
+
+**Normal model:**
 
 $$
 \begin{align}
@@ -66,7 +109,8 @@ y_i &\sim \text{N}(\mu, \sigma), \\
 \end{align}
 $$
 
-The second option uses the Student-T distribution with degrees of freedom $\nu$:
+
+**Student-T model:**
 
 $$
 \begin{align}
@@ -154,8 +198,6 @@ model {
 - [examples/hierarchical_models](/examples/hierarchical_models/): estimating group means with no pooling and with partial pooling. Includes R code.
 - [examples/gaussian_process](/examples/gaussian_process/): using Gaussian Processes to estimate the mean and scale of a dataset. Provides an example of variable name rewriting. Includes R code.
 
-## Todo
-- Comments are currently not included in the merged output because they are not
-  stored in the AST (they are stored in a separate list), and more work is
-  needed to figure out how to merge multiple comment lists.
-- Add option to output to file instead of `stdout`
+## Limitations
+- **Comments not preserved** in merged output. Comments are stored separately from the AST, and merging multiple comment lists is not yet supported.
+- **Output is to `stdout` only.** Use shell redirection (`> output.stan`) to write to a file.
