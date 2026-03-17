@@ -1,0 +1,43 @@
+name: Release
+on:
+  push:
+    tags: ['v*']
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: ubuntu-latest
+            artifact: stanmerge-linux-x86_64
+          - os: macos-latest
+            artifact: stanmerge-macos-x86_64
+          - os: macos-14
+            artifact: stanmerge-macos-arm64
+
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      
+      - uses: ocaml/setup-ocaml@v3
+        with:
+          ocaml-compiler: 5.1
+
+      - run: opam install . --deps-only
+      - run: opam exec -- dune build
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: _build/default/bin/main.exe
+
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: softprops/action-gh-release@v2
+        with: 
+          files: "*.exe"
