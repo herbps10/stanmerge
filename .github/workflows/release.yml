@@ -1,21 +1,22 @@
 name: Release
 on:
-  push:
-    tags: ['v*']
+  release:
+    types: 
+      - created
 
 jobs:
-  build:
+  release:
     strategy:
+      fail-fast: true
       matrix:
         include:
           - os: ubuntu-latest
             artifact: stanmerge-linux-x86_64
-          - os: macos-latest
-            artifact: stanmerge-macos-x86_64
-          - os: macos-14
+          - os: macos-latest:
             artifact: stanmerge-macos-arm64
 
     runs-on: ${{ matrix.os }}
+
     steps:
       - uses: actions/checkout@v4
         with:
@@ -25,35 +26,20 @@ jobs:
         with:
           ocaml-compiler: 4.14.1
 
-      - run: |
+      - name: Update opam repo
+        run: opam update
+
+      - name: Install dependencies
+        run: |
           opam install . --deps-only --working-dir lib/stanc3
           opam install . --deps-only 
 
       - run: opam exec -- dune build bin/main.exe
 
-      - name: Copy and rename binary
-        run: cp _build/default/bin/main.exe ${{ matrix.artifact }}
-
-      - name: Upload binary
-        uses: actions/upload-artifact@v4
+      - name: Upload binary to release
+        uses: svenstaro/upload-release-action@v2
         with:
-          name: ${{ matrix.artifact }}
-          path: ${{ matrix.artifact }}
-
-  release:
-    needs: build
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Download all artifacts
-        uses: actions/download-artifacts@v4
-        with:
-          path: artifacts
-          merge-multiple: true
-
-      - name: List artifacts
-        run: ls -la artifacts/
-
-      - name: Create release
-        uses: softprops/action-gh-release@v2
-        with: 
-          files: artifacts/*
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: _build/default/bin/main.exe
+          asset_name: ${{ matrix.asset }}
+          tag: ${{ github.ref }}
