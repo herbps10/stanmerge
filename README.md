@@ -30,7 +30,7 @@ On Linux/macOS, make the binary executable after downloading:
 chmod +x stanmerge-*
 ```
 
-## Option 2: Build from Source
+### Option 2: Build from Source
 
 The main dependency of this project is [`stanc3`](https://mc-stan.org/stanc3), which is included as a Git submodule inside [`lib/`](lib/). As a first step, follow the  [Getting Started](https://mc-stan.org/stanc3/stanc/getting_started.html) for `stanc3`.
 
