@@ -1,3 +1,5 @@
 [submodule "stanc3"]
 	path = lib/stanc3
 	url = https://github.com/stan-dev/stanc3
+[submodule "lib/stanc3"]
+	url = git@github.com:herbps10/stanc3.git
