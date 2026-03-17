@@ -27,7 +27,7 @@ jobs:
 
       - run: |
           opam pin add stanc.dev lib/stanc3 --no-action
-          opam install . --deps-only --with-teste
+          opam install . --deps-only --with-test
 
       - run: opam exec -- dune build
 
