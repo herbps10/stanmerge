@@ -1,4 +1,5 @@
 (executable
  (public_name stanmerge)
  (name main)
- (libraries stanmerge.transform stanc.frontend stanmerge))
+ (libraries core_unix.command_unix stanmerge.transform stanc.frontend stanmerge)
+ (preprocess (pps ppx_jane)))
