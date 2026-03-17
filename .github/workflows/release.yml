@@ -26,8 +26,8 @@ jobs:
           ocaml-compiler: 5.1
 
       - run: |
-          opam pin add stanc.dev lib/stanc3 --no-action
-          opam install . --deps-only --with-test
+          opam install . --deps-only --working-dir lib/stanc3
+          opam install . --deps-only 
 
       - run: opam exec -- dune build
 
