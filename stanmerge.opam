@@ -12,6 +12,7 @@ bug-reports: "https://github.com/herbps10/stanmerge/issues"
 depends: [
   "ocaml"
   "dune" {>= "2.8"}
+  "core_unix"
   "odoc" {with-doc}
 ]
 build: [

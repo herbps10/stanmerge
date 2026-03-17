@@ -19,7 +19,7 @@
  (name stanmerge)
  (synopsis "Merge Stan files")
  (description "Tool for block-by-block merging of Stan source files.")
- (depends ocaml dune)
+ (depends ocaml dune core_unix)
  (tags
   (topics "to describe" your project)))
 
