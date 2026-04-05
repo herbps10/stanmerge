@@ -69,13 +69,17 @@ dune exec stanmerge [model_file1.stan] [model_file2.stan] ...
 ```
 
 ### Configuration File
-A JSON configuration file can be used to specify input files along with variable name transformation rules.
+A JSON configuration file can be used to specify output files, input files, and variable name transformation rules.
+
 ```bash
 stanmerge --config config.json
 ```
 
 #### Format
-The configuration file maps Stan model filenames to an associative array of variable rename rules:
+The configuration file can either be a single object or an array of objects. Each object specifies one merged output, mapping Stan model filenames to their variable rename rules. An optional `"output"` key specifies the output file path; if omitted, the result is printed to `stdout`. 
+
+**Single output:** 
+
 ```json
 {
   "model_file1.stan": {
@@ -83,14 +87,45 @@ The configuration file maps Stan model filenames to an associative array of vari
   },
   "model_file2.stan": {
     "var": "beta",
-  }
+  },
+  "output": "merged.stan"
 }
 ```
 In this example:
 1. `model_file1.stan` is included, with all instances of `var` in variable names rewritten to `alpha`
 2. `model_file2.stan` is included, with all instances of `var` in variable names rewritten to `beta`
+3. The merged result is written to `merged.stan`
 
-See [examples/gaussian_process](/examples/gaussian_process/) for an example that uses variable name rewriting.
+**Multiple outputs:**
+
+Use an array to generate multiple merged Stan programs from a single config file:
+
+```json
+[
+  {
+    "output": "model_a.stan",
+    "base.stan": {},
+    "modules/likelihood_normal.stan": {},
+    "modules/prior.stan": {
+      "var": "alpha"
+    }
+  },
+  {
+    "output": "model_b.stan",
+    "base.stan": {},
+    "modules/likelihood_student_t.stan": {},
+    "modules/prior.stan": {
+      "var": "beta"
+    }
+  }
+]
+```
+
+In this example, two Stan programs are generated. Both sare `base.stan` and reuse `modules/prior.stan` with different variable renamings, but use different likelihood modules. Each merged result is written to the file specified by `"output"`.
+
+Variable rename rules are applied as string replacements on variable names. In the above example, any variables in `modules/prior.stan` with a name containing `var` will have `var` replaced with `alpha` or `beta`, respectively.
+
+See [examples/gaussian_process](/examples/gaussian_process/) for a complete example that uses variable name rewriting.
 
 ## Example: Location-Scale Models
 
@@ -199,4 +234,3 @@ model {
 
 ## Limitations
 - **Comments not preserved** in merged output. Comments are stored separately from the AST, and merging multiple comment lists is not yet supported.
-- **Output is to `stdout` only.** Use shell redirection (`> output.stan`) to write to a file.
